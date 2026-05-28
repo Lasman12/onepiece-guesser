@@ -184,7 +184,7 @@ main {
   background: var(--parchment);
   border: 2px solid var(--ink);
   border-radius: 6px;
-  max-height: 360px;
+  max-height: 480px;
   overflow-y: auto;
   display: none;
   box-shadow: 0 6px 18px rgba(0,0,0,0.3);
@@ -193,15 +193,15 @@ main {
 .suggestions.show { display: block; }
 
 .suggestions li {
-  padding: 8px 12px;
+  padding: 10px 14px;
   cursor: pointer;
   border-bottom: 1px dashed var(--parchment-darker);
   font-family: "Rubik", sans-serif;
-  font-size: 15px;
+  font-size: 17px;
   color: var(--ink);
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 14px;
   user-select: none;
 }
 
@@ -214,22 +214,24 @@ main {
 }
 
 .avatar {
-  width: 40px;
-  height: 40px;
+  width: 80px;
+  height: 80px;
   border-radius: 50%;
   display: inline-flex;
   align-items: center;
   justify-content: center;
   font-weight: 800;
   font-family: "Rubik", sans-serif;
-  font-size: 18px;
+  font-size: 32px;
   color: #fff;
-  border: 2px solid var(--ink);
+  border: 3px solid var(--ink);
   flex-shrink: 0;
   text-shadow: 1px 1px 0 rgba(0,0,0,0.5);
   background-size: cover;
-  background-position: center;
+  background-position: center center;
+  background-repeat: no-repeat;
   overflow: hidden;
+  image-rendering: auto;
 }
 
 .suggestions .li-text {
@@ -241,12 +243,12 @@ main {
 
 .suggestions .li-text .he {
   font-family: "Rubik", sans-serif;
-  font-size: 15px;
+  font-size: 18px;
   font-weight: 600;
 }
 
 .suggestions .li-text .en {
-  font-size: 12px;
+  font-size: 14px;
   color: var(--ink-soft);
   font-family: "Rubik", sans-serif;
   font-weight: 500;
@@ -388,10 +390,10 @@ td.name .row-flex {
 }
 
 td.name .avatar {
-  width: 32px;
-  height: 32px;
-  font-size: 14px;
-  border-width: 1px;
+  width: 64px;
+  height: 64px;
+  font-size: 26px;
+  border-width: 2px;
 }
 
 .arrow {
@@ -424,9 +426,9 @@ td.name .avatar {
   .crew-filter { font-size: 14px; padding: 10px 14px; }
   .status { padding: 10px 14px; font-size: 14px; }
   .legend { gap: 10px; font-size: 11px; }
-  .suggestions { max-height: 50vh; }
-  .suggestions li { padding: 10px 10px; gap: 10px; }
-  .avatar { width: 36px; height: 36px; font-size: 16px; }
+  .suggestions { max-height: 60vh; }
+  .suggestions li { padding: 10px 10px; gap: 12px; }
+  .avatar { width: 72px; height: 72px; font-size: 28px; border-width: 2px; }
 
   /* Convert table to cards */
   .table-wrap { padding: 0; background: transparent; border: none; box-shadow: none; overflow: visible; }
@@ -485,8 +487,8 @@ td.name .avatar {
     border-bottom: 2px solid var(--gold-dark);
   }
   tbody td.name::before { content: none; }
-  tbody td.name .row-flex { gap: 10px; }
-  tbody td.name .avatar { width: 32px; height: 32px; font-size: 14px; }
+  tbody td.name .row-flex { gap: 12px; }
+  tbody td.name .avatar { width: 64px; height: 64px; font-size: 26px; border-width: 2px; }
 }
 
 @media (max-width: 420px) {
