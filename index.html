@@ -1,0 +1,1222 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>One Piece - נחש את הדמות</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Pirata+One&family=Rubik:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+* { box-sizing: border-box; }
+
+:root {
+  --parchment: #f1e2c4;
+  --parchment-dark: #d9c39a;
+  --parchment-darker: #b89a6a;
+  --ink: #2b1810;
+  --ink-soft: #5a3a24;
+  --gold: #c9a44c;
+  --gold-dark: #8a6a1f;
+  --red: #a8261d;
+  --red-dark: #6e150e;
+  --correct: #2f7d32;
+  --correct-dark: #1b4d1e;
+  --partial: #c98a1a;
+  --wrong: #7a2a22;
+  --wrong-dark: #4d1813;
+}
+
+html, body {
+  margin: 0;
+  padding: 0;
+  color: var(--ink);
+  font-family: "Rubik", "Segoe UI", Arial, sans-serif;
+  font-weight: 500;
+  min-height: 100vh;
+  background:
+    radial-gradient(ellipse at 20% 10%, rgba(184,154,106,0.5), transparent 60%),
+    radial-gradient(ellipse at 80% 90%, rgba(138,106,31,0.4), transparent 60%),
+    repeating-linear-gradient(135deg, rgba(120,80,40,0.05) 0 2px, transparent 2px 7px),
+    linear-gradient(180deg, #f1e2c4 0%, #e6d2a8 100%);
+  color-scheme: light;
+}
+
+header {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  gap: 16px;
+  padding: 18px 22px;
+  background:
+    repeating-linear-gradient(90deg, rgba(0,0,0,0.04) 0 4px, transparent 4px 8px),
+    linear-gradient(180deg, #6e150e 0%, #a8261d 60%, #8a1a13 100%);
+  color: var(--parchment);
+  border-bottom: 6px double var(--gold);
+  box-shadow: 0 4px 16px rgba(0,0,0,0.35);
+}
+
+.lang-toggle {
+  background: rgba(0,0,0,0.35);
+  color: var(--gold);
+  border: 2px solid var(--gold);
+  padding: 7px 14px;
+  border-radius: 20px;
+  font-family: "Rubik", sans-serif;
+  font-weight: 700;
+  font-size: 13px;
+  letter-spacing: 1px;
+  cursor: pointer;
+  transition: background 0.15s, transform 0.08s;
+  justify-self: start;
+  min-width: 48px;
+}
+
+.lang-toggle:hover { background: rgba(0,0,0,0.55); }
+.lang-toggle:active { transform: scale(0.95); }
+
+header h1 {
+  margin: 0;
+  font-family: "Pirata One", "Rubik", serif;
+  font-size: 36px;
+  letter-spacing: 2px;
+  color: var(--gold);
+  text-shadow: 2px 2px 0 #2b0a07, 0 0 18px rgba(201,164,76,0.6);
+  font-weight: 400;
+  text-align: center;
+  line-height: 1.1;
+}
+
+button.primary {
+  background: linear-gradient(180deg, #f1d77a 0%, #c9a44c 60%, #8a6a1f 100%);
+  color: var(--ink);
+  border: 2px solid var(--ink);
+  padding: 10px 22px;
+  border-radius: 4px;
+  font-weight: 700;
+  cursor: pointer;
+  font-size: 15px;
+  font-family: "Rubik", sans-serif;
+  letter-spacing: 1px;
+  box-shadow: 0 3px 0 #5a3a18, 0 4px 10px rgba(0,0,0,0.35);
+  transition: transform 0.08s, box-shadow 0.08s;
+}
+
+button.primary:hover { filter: brightness(1.07); }
+
+button.primary:active {
+  transform: translateY(2px);
+  box-shadow: 0 1px 0 #5a3a18, 0 2px 4px rgba(0,0,0,0.35);
+}
+
+main {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 24px 20px 40px;
+}
+
+.search-row {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 14px;
+  align-items: stretch;
+}
+
+.search-wrap {
+  position: relative;
+  flex: 1;
+  min-width: 0;
+}
+
+.crew-filter {
+  padding: 0 16px;
+  border-radius: 6px;
+  border: 2px solid var(--ink);
+  background: linear-gradient(180deg, #f1d77a 0%, #c9a44c 100%);
+  color: var(--ink);
+  font-family: "Rubik", sans-serif;
+  font-weight: 700;
+  font-size: 14px;
+  cursor: pointer;
+  outline: none;
+  box-shadow: 0 2px 0 var(--gold-dark);
+  min-width: 180px;
+  max-width: 240px;
+}
+
+.crew-filter:hover { filter: brightness(1.05); }
+.crew-filter:focus { border-color: var(--red); }
+
+@media (max-width: 600px) {
+  .search-row { flex-direction: column; }
+  .crew-filter { min-width: 0; max-width: none; padding: 10px 16px; }
+}
+
+#searchInput {
+  width: 100%;
+  padding: 14px 18px;
+  border-radius: 6px;
+  border: 2px solid var(--ink);
+  background: var(--parchment);
+  color: var(--ink);
+  font-size: 17px;
+  font-family: "Rubik", sans-serif;
+  font-weight: 500;
+  outline: none;
+  box-shadow: inset 0 2px 6px rgba(0,0,0,0.15), 0 2px 0 var(--gold-dark);
+}
+
+#searchInput::placeholder { color: var(--ink-soft); opacity: 0.7; }
+
+#searchInput:focus {
+  border-color: var(--red);
+  box-shadow: inset 0 2px 6px rgba(0,0,0,0.15), 0 0 0 3px rgba(168,38,29,0.25);
+}
+
+.suggestions {
+  list-style: none;
+  margin: 6px 0 0;
+  padding: 0;
+  position: absolute;
+  z-index: 100;
+  right: 0;
+  left: 0;
+  background: var(--parchment);
+  border: 2px solid var(--ink);
+  border-radius: 6px;
+  max-height: 360px;
+  overflow-y: auto;
+  display: none;
+  box-shadow: 0 6px 18px rgba(0,0,0,0.3);
+}
+
+.suggestions.show { display: block; }
+
+.suggestions li {
+  padding: 8px 12px;
+  cursor: pointer;
+  border-bottom: 1px dashed var(--parchment-darker);
+  font-family: "Rubik", sans-serif;
+  font-size: 15px;
+  color: var(--ink);
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  user-select: none;
+}
+
+.suggestions li:last-child { border-bottom: none; }
+
+.suggestions li:hover,
+.suggestions li.active {
+  background: var(--gold);
+  color: var(--ink);
+}
+
+.avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 800;
+  font-family: "Rubik", sans-serif;
+  font-size: 18px;
+  color: #fff;
+  border: 2px solid var(--ink);
+  flex-shrink: 0;
+  text-shadow: 1px 1px 0 rgba(0,0,0,0.5);
+  background-size: cover;
+  background-position: center;
+  overflow: hidden;
+}
+
+.suggestions .li-text {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  text-align: start;
+}
+
+.suggestions .li-text .he {
+  font-family: "Rubik", sans-serif;
+  font-size: 15px;
+  font-weight: 600;
+}
+
+.suggestions .li-text .en {
+  font-size: 12px;
+  color: var(--ink-soft);
+  font-family: "Rubik", sans-serif;
+  font-weight: 500;
+}
+
+.status {
+  margin: 14px 0;
+  padding: 14px 18px;
+  border-radius: 6px;
+  background: var(--parchment-dark);
+  border: 2px solid var(--ink);
+  font-weight: 600;
+  min-height: 22px;
+  color: var(--ink);
+  text-align: center;
+  font-family: "Rubik", sans-serif;
+  font-size: 16px;
+  box-shadow: 0 2px 0 var(--gold-dark);
+}
+
+.status.win {
+  background: linear-gradient(180deg, #3fa244 0%, #2f7d32 100%);
+  color: #fff;
+  border-color: #1b4d1e;
+  text-shadow: 1px 1px 0 #1b4d1e;
+}
+
+.legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  margin: 14px 0;
+  font-size: 13px;
+  color: var(--ink-soft);
+  justify-content: center;
+  font-family: "Rubik", sans-serif;
+  font-weight: 500;
+}
+
+.legend-item { display: inline-flex; align-items: center; gap: 6px; }
+
+.swatch {
+  display: inline-block;
+  width: 16px;
+  height: 16px;
+  border-radius: 3px;
+  border: 1px solid var(--ink);
+}
+
+.swatch.correct { background: var(--correct); }
+.swatch.partial { background: var(--partial); }
+.swatch.wrong { background: var(--wrong); }
+
+.table-wrap {
+  overflow-x: auto;
+  background:
+    repeating-linear-gradient(45deg, rgba(0,0,0,0.03) 0 2px, transparent 2px 6px),
+    var(--parchment);
+  border: 3px solid var(--ink);
+  border-radius: 8px;
+  padding: 12px;
+  box-shadow: inset 0 0 30px rgba(120,80,30,0.25), 0 4px 14px rgba(0,0,0,0.25);
+}
+
+table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 6px;
+}
+
+th, td {
+  padding: 12px 8px;
+  text-align: center;
+  font-size: 14px;
+  border-radius: 5px;
+  font-family: "Rubik", sans-serif;
+}
+
+th {
+  background: linear-gradient(180deg, #2b1810 0%, #5a3a24 100%);
+  color: var(--gold);
+  font-weight: 700;
+  font-family: "Rubik", sans-serif;
+  font-size: 16px;
+  letter-spacing: 0.5px;
+  border: 2px solid var(--gold-dark);
+  text-shadow: 1px 1px 0 #000;
+}
+
+td {
+  background: var(--wrong);
+  color: #fff;
+  vertical-align: middle;
+  transition: background 0.3s, transform 0.2s;
+  border: 2px solid var(--wrong-dark);
+  font-weight: 600;
+  animation: dropIn 0.35s ease-out;
+}
+
+@keyframes dropIn {
+  from { opacity: 0; transform: translateY(-12px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+td.correct {
+  background: linear-gradient(180deg, #3fa244 0%, #2f7d32 100%);
+  border-color: var(--correct-dark);
+  text-shadow: 1px 1px 0 var(--correct-dark);
+}
+
+td.partial {
+  background: linear-gradient(180deg, #e8b13a 0%, #c98a1a 100%);
+  color: var(--ink);
+  border-color: #8a5a10;
+  text-shadow: 1px 1px 0 rgba(255,255,255,0.3);
+}
+
+td.wrong {
+  background: linear-gradient(180deg, #a8261d 0%, #7a2a22 100%);
+  border-color: var(--wrong-dark);
+  text-shadow: 1px 1px 0 var(--wrong-dark);
+}
+
+td.name {
+  background: linear-gradient(180deg, #f1d77a 0%, #c9a44c 100%);
+  color: var(--ink);
+  font-weight: 700;
+  font-family: "Rubik", sans-serif;
+  font-size: 15px;
+  border-color: var(--gold-dark);
+  letter-spacing: 0.3px;
+}
+
+td.name .row-flex {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  justify-content: center;
+}
+
+td.name .avatar {
+  width: 32px;
+  height: 32px;
+  font-size: 14px;
+  border-width: 1px;
+}
+
+.arrow {
+  display: inline-block;
+  margin-inline-start: 6px;
+  font-size: 18px;
+  font-weight: bold;
+}
+
+/* Smooth horizontal scroll on mobile */
+.table-wrap { -webkit-overflow-scrolling: touch; }
+
+/* ===== Mobile (<=700px) ===== */
+@media (max-width: 700px) {
+  header {
+    grid-template-columns: 1fr auto;
+    grid-template-areas:
+      "lang newgame"
+      "title title";
+    gap: 10px;
+    padding: 14px 14px 16px;
+  }
+  .lang-toggle { grid-area: lang; padding: 6px 12px; font-size: 12px; min-width: 44px; }
+  #newGameBtn { grid-area: newgame; }
+  header h1 { grid-area: title; font-size: 24px; letter-spacing: 1px; }
+
+  button.primary { padding: 8px 16px; font-size: 14px; }
+  main { padding: 14px 10px 30px; }
+  #searchInput { padding: 12px 14px; font-size: 16px; }
+  .crew-filter { font-size: 14px; padding: 10px 14px; }
+  .status { padding: 10px 14px; font-size: 14px; }
+  .legend { gap: 10px; font-size: 11px; }
+  .suggestions { max-height: 50vh; }
+  .suggestions li { padding: 10px 10px; gap: 10px; }
+  .avatar { width: 36px; height: 36px; font-size: 16px; }
+
+  /* Convert table to cards */
+  .table-wrap { padding: 0; background: transparent; border: none; box-shadow: none; overflow: visible; }
+  table { border-spacing: 0; }
+  thead { display: none; }
+  tbody { display: block; }
+  tbody tr {
+    display: block;
+    margin-bottom: 14px;
+    border: 3px solid var(--ink);
+    border-radius: 10px;
+    overflow: hidden;
+    background: var(--parchment);
+    box-shadow: 0 3px 8px rgba(0,0,0,0.25);
+    animation: dropIn 0.35s ease-out;
+  }
+  tbody td {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 14px;
+    border-radius: 0;
+    border: none;
+    border-bottom: 1px solid rgba(0,0,0,0.18);
+    font-size: 14px;
+    text-align: end;
+    animation: none;
+    text-shadow: none;
+  }
+  tbody td:last-child { border-bottom: none; }
+  tbody td::before {
+    content: attr(data-label);
+    font-weight: 700;
+    color: var(--ink);
+    margin-inline-end: 12px;
+    font-size: 13px;
+    opacity: 0.85;
+  }
+  tbody td.correct,
+  tbody td.partial,
+  tbody td.wrong {
+    color: #fff;
+    text-shadow: 1px 1px 0 rgba(0,0,0,0.4);
+  }
+  tbody td.partial { color: var(--ink); text-shadow: none; }
+  tbody td.correct::before,
+  tbody td.partial::before,
+  tbody td.wrong::before { color: rgba(255,255,255,0.95); opacity: 1; }
+  tbody td.partial::before { color: var(--ink); }
+
+  tbody td.name {
+    justify-content: center;
+    font-size: 17px;
+    padding: 12px 14px;
+    background: linear-gradient(180deg, #f1d77a 0%, #c9a44c 100%);
+    border-bottom: 2px solid var(--gold-dark);
+  }
+  tbody td.name::before { content: none; }
+  tbody td.name .row-flex { gap: 10px; }
+  tbody td.name .avatar { width: 32px; height: 32px; font-size: 14px; }
+}
+
+@media (max-width: 420px) {
+  header h1 { font-size: 20px; }
+  tbody td { font-size: 13px; padding: 9px 12px; }
+  tbody td::before { font-size: 12px; }
+  tbody td.name { font-size: 16px; }
+}
+</style>
+</head>
+<body>
+<header>
+  <button id="langToggleBtn" class="lang-toggle">EN</button>
+  <h1 id="appTitle">נחש את דמות ה-One Piece</h1>
+  <button id="newGameBtn" class="primary">משחק חדש</button>
+</header>
+
+<main>
+  <div class="search-row">
+    <div class="search-wrap">
+      <input id="searchInput" type="text" placeholder="הקלד שם דמות..." autocomplete="off" />
+      <ul id="suggestions" class="suggestions"></ul>
+    </div>
+    <select id="crewFilter" class="crew-filter"></select>
+  </div>
+
+  <div class="status" id="status"></div>
+
+  <div class="legend" id="legend"></div>
+
+  <div class="table-wrap">
+    <table id="guessTable">
+      <thead>
+        <tr id="tableHead"></tr>
+      </thead>
+      <tbody id="guessBody"></tbody>
+    </table>
+  </div>
+</main>
+
+<script>
+/* ============================================================
+   ===== להוסיף דמות חדשה? הוסף אובייקט למערך CHARACTERS =====
+   ============================================================
+
+   מבנה דמות:
+   {
+     name: "שם באנגלית",              // חובה - שם ייחודי באנגלית
+     he:   "שם בעברית",               // חובה - שם בעברית לחיפוש
+     img:  "URL לתמונה (אופציונלי)",   // ריק = יציג אווטר עם אות
+     gender: "Male" / "Female",
+     height: 180,                     // בסנטימטרים
+     haki: ["Observation","Armament","Conqueror"],  // ריק [] = אין האקי
+     devilFruit: "None" / "Paramecia" / "Logia" / "Zoan" / "Mythical Zoan" / "Ancient Zoan",
+     crew: "שם הצוות באנגלית",         // למשל "Straw Hat Pirates" או "None"
+     firstArc: "שם הארק באנגלית"       // למשל "Marineford" או "Skypiea"
+   }
+
+   ערכים אפשריים לארקים: Romance Dawn, Orange Town, Syrup Village,
+   Baratie, Arlong Park, Loguetown, Reverse Mountain, Whisky Peak,
+   Little Garden, Drum Island, Alabasta, Jaya, Skypiea,
+   Long Ring Long Land, Water 7, Enies Lobby, Thriller Bark,
+   Sabaody, Amazon Lily, Impel Down, Marineford, Post-War,
+   Fishman Island, Punk Hazard, Dressrosa, Zou, Whole Cake Island,
+   Reverie, Wano, Egghead, Elbaf
+
+   טיפ: לתמונות, אפשר להעלות תמונה לכתובת כמו imgur ולשים את ה-URL.
+   אם תשאיר img ריק, יוצג אווטר צבעוני עם האות הראשונה של השם.
+   ============================================================ */
+
+const CHARACTERS = [
+  {name:"Monkey D. Luffy",he:"מאנקי די לופי",img:"",gender:"Male",height:174,haki:["Observation","Armament","Conqueror"],devilFruit:"Mythical Zoan",crew:"Straw Hat Pirates",firstArc:"Romance Dawn"},
+  {name:"Roronoa Zoro",he:"רורונואה זורו",img:"",gender:"Male",height:181,haki:["Observation","Armament","Conqueror"],devilFruit:"None",crew:"Straw Hat Pirates",firstArc:"Romance Dawn"},
+  {name:"Nami",he:"נאמי",img:"",gender:"Female",height:170,haki:[],devilFruit:"None",crew:"Straw Hat Pirates",firstArc:"Orange Town"},
+  {name:"Usopp",he:"אוסופ",img:"",gender:"Male",height:176,haki:["Observation"],devilFruit:"None",crew:"Straw Hat Pirates",firstArc:"Syrup Village"},
+  {name:"Sanji",he:"סאנג'י",img:"",gender:"Male",height:180,haki:["Observation","Armament"],devilFruit:"None",crew:"Straw Hat Pirates",firstArc:"Baratie"},
+  {name:"Tony Tony Chopper",he:"טוני טוני צ'ופר",img:"",gender:"Male",height:90,haki:[],devilFruit:"Zoan",crew:"Straw Hat Pirates",firstArc:"Drum Island"},
+  {name:"Nico Robin",he:"ניקו רובין",img:"",gender:"Female",height:188,haki:[],devilFruit:"Paramecia",crew:"Straw Hat Pirates",firstArc:"Whisky Peak"},
+  {name:"Franky",he:"פרנקי",img:"",gender:"Male",height:240,haki:[],devilFruit:"None",crew:"Straw Hat Pirates",firstArc:"Water 7"},
+  {name:"Brook",he:"ברוק",img:"",gender:"Male",height:277,haki:[],devilFruit:"Paramecia",crew:"Straw Hat Pirates",firstArc:"Thriller Bark"},
+  {name:"Jinbe",he:"ג'ינבי",img:"",gender:"Male",height:301,haki:["Observation","Armament"],devilFruit:"None",crew:"Straw Hat Pirates",firstArc:"Impel Down"},
+
+  {name:"Shanks",he:"שאנקס",img:"",gender:"Male",height:199,haki:["Observation","Armament","Conqueror"],devilFruit:"None",crew:"Red Hair Pirates",firstArc:"Romance Dawn"},
+  {name:"Benn Beckman",he:"בן בקמן",img:"",gender:"Male",height:206,haki:["Armament"],devilFruit:"None",crew:"Red Hair Pirates",firstArc:"Romance Dawn"},
+  {name:"Yasopp",he:"יאסופ",img:"",gender:"Male",height:187,haki:["Observation"],devilFruit:"None",crew:"Red Hair Pirates",firstArc:"Romance Dawn"},
+  {name:"Lucky Roux",he:"לאקי רו",img:"",gender:"Male",height:194,haki:[],devilFruit:"None",crew:"Red Hair Pirates",firstArc:"Romance Dawn"},
+
+  {name:"Edward Newgate",he:"וויטבירד",img:"",gender:"Male",height:666,haki:["Armament","Conqueror"],devilFruit:"Paramecia",crew:"Whitebeard Pirates",firstArc:"Jaya"},
+  {name:"Marco",he:"מארקו",img:"",gender:"Male",height:203,haki:["Armament"],devilFruit:"Mythical Zoan",crew:"Whitebeard Pirates",firstArc:"Sabaody"},
+  {name:"Portgas D. Ace",he:"פורטגאס די אייס",img:"",gender:"Male",height:185,haki:["Observation","Armament","Conqueror"],devilFruit:"Logia",crew:"Whitebeard Pirates",firstArc:"Alabasta"},
+  {name:"Jozu",he:"ג'וזו",img:"",gender:"Male",height:350,haki:["Armament"],devilFruit:"Paramecia",crew:"Whitebeard Pirates",firstArc:"Marineford"},
+  {name:"Vista",he:"ויסטה",img:"",gender:"Male",height:295,haki:["Armament"],devilFruit:"None",crew:"Whitebeard Pirates",firstArc:"Marineford"},
+
+  {name:"Charlotte Linlin",he:"ביג מאם",img:"",gender:"Female",height:880,haki:["Observation","Armament","Conqueror"],devilFruit:"Paramecia",crew:"Big Mom Pirates",firstArc:"Fishman Island"},
+  {name:"Charlotte Katakuri",he:"קטאקורי",img:"",gender:"Male",height:509,haki:["Observation","Armament","Conqueror"],devilFruit:"Paramecia",crew:"Big Mom Pirates",firstArc:"Whole Cake Island"},
+  {name:"Charlotte Cracker",he:"קרקר",img:"",gender:"Male",height:488,haki:["Armament"],devilFruit:"Paramecia",crew:"Big Mom Pirates",firstArc:"Whole Cake Island"},
+  {name:"Charlotte Smoothie",he:"סמותי",img:"",gender:"Female",height:870,haki:["Armament"],devilFruit:"Paramecia",crew:"Big Mom Pirates",firstArc:"Whole Cake Island"},
+  {name:"Charlotte Perospero",he:"פרוספרו",img:"",gender:"Male",height:666,haki:["Armament"],devilFruit:"Paramecia",crew:"Big Mom Pirates",firstArc:"Whole Cake Island"},
+  {name:"Charlotte Pudding",he:"פודינג",img:"",gender:"Female",height:183,haki:[],devilFruit:"Paramecia",crew:"Big Mom Pirates",firstArc:"Whole Cake Island"},
+
+  {name:"Kaido",he:"קאידו",img:"",gender:"Male",height:710,haki:["Observation","Armament","Conqueror"],devilFruit:"Mythical Zoan",crew:"Beasts Pirates",firstArc:"Zou"},
+  {name:"King",he:"קינג",img:"",gender:"Male",height:711,haki:["Armament"],devilFruit:"Ancient Zoan",crew:"Beasts Pirates",firstArc:"Whole Cake Island"},
+  {name:"Queen",he:"קווין",img:"",gender:"Male",height:605,haki:["Armament"],devilFruit:"Ancient Zoan",crew:"Beasts Pirates",firstArc:"Wano"},
+  {name:"Jack",he:"ג'ק",img:"",gender:"Male",height:800,haki:["Armament"],devilFruit:"Ancient Zoan",crew:"Beasts Pirates",firstArc:"Zou"},
+  {name:"Who's-Who",he:"הוס הו",img:"",gender:"Male",height:347,haki:["Armament"],devilFruit:"Ancient Zoan",crew:"Beasts Pirates",firstArc:"Wano"},
+  {name:"Sasaki",he:"סאסאקי",img:"",gender:"Male",height:511,haki:["Armament"],devilFruit:"Ancient Zoan",crew:"Beasts Pirates",firstArc:"Wano"},
+  {name:"Black Maria",he:"בלאק מריה",img:"",gender:"Female",height:820,haki:["Armament"],devilFruit:"Ancient Zoan",crew:"Beasts Pirates",firstArc:"Wano"},
+  {name:"Ulti",he:"אולטי",img:"",gender:"Female",height:280,haki:["Armament"],devilFruit:"Ancient Zoan",crew:"Beasts Pirates",firstArc:"Wano"},
+  {name:"Page One",he:"פייג' וואן",img:"",gender:"Male",height:295,haki:["Armament"],devilFruit:"Ancient Zoan",crew:"Beasts Pirates",firstArc:"Wano"},
+
+  {name:"Marshall D. Teach",he:"בלאקבירד",img:"",gender:"Male",height:344,haki:["Armament"],devilFruit:"Logia",crew:"Blackbeard Pirates",firstArc:"Jaya"},
+  {name:"Jesus Burgess",he:"ג'יזס ברגס",img:"",gender:"Male",height:362,haki:["Armament"],devilFruit:"Paramecia",crew:"Blackbeard Pirates",firstArc:"Jaya"},
+  {name:"Shiryu",he:"שיריו",img:"",gender:"Male",height:295,haki:["Armament"],devilFruit:"Paramecia",crew:"Blackbeard Pirates",firstArc:"Impel Down"},
+  {name:"Van Augur",he:"ואן אוגר",img:"",gender:"Male",height:295,haki:[],devilFruit:"Paramecia",crew:"Blackbeard Pirates",firstArc:"Jaya"},
+
+  {name:"Dracule Mihawk",he:"דרקול מיהוק",img:"",gender:"Male",height:198,haki:["Observation","Armament"],devilFruit:"None",crew:"Cross Guild",firstArc:"Baratie"},
+  {name:"Buggy",he:"באגי",img:"",gender:"Male",height:192,haki:[],devilFruit:"Paramecia",crew:"Cross Guild",firstArc:"Orange Town"},
+  {name:"Crocodile",he:"קרוקודיל",img:"",gender:"Male",height:253,haki:[],devilFruit:"Logia",crew:"Cross Guild",firstArc:"Whisky Peak"},
+  {name:"Boa Hancock",he:"בואה האנקוק",img:"",gender:"Female",height:191,haki:["Observation","Armament","Conqueror"],devilFruit:"Paramecia",crew:"Kuja Pirates",firstArc:"Amazon Lily"},
+  {name:"Bartholomew Kuma",he:"ברתולומיאו קומה",img:"",gender:"Male",height:689,haki:[],devilFruit:"Paramecia",crew:"Revolutionary Army",firstArc:"Thriller Bark"},
+  {name:"Gecko Moria",he:"גקו מוריה",img:"",gender:"Male",height:692,haki:[],devilFruit:"Paramecia",crew:"Thriller Bark Pirates",firstArc:"Thriller Bark"},
+  {name:"Donquixote Doflamingo",he:"דופלמינגו",img:"",gender:"Male",height:305,haki:["Observation","Armament","Conqueror"],devilFruit:"Paramecia",crew:"Donquixote Pirates",firstArc:"Jaya"},
+  {name:"Edward Weevil",he:"אדוארד ויוויל",img:"",gender:"Male",height:680,haki:["Armament"],devilFruit:"None",crew:"None",firstArc:"Dressrosa"},
+
+  {name:"Trafalgar Law",he:"טרפלגר לאו",img:"",gender:"Male",height:191,haki:["Observation","Armament"],devilFruit:"Paramecia",crew:"Heart Pirates",firstArc:"Sabaody"},
+  {name:"Eustass Kid",he:"יוסטס קיד",img:"",gender:"Male",height:205,haki:["Armament","Conqueror"],devilFruit:"Paramecia",crew:"Kid Pirates",firstArc:"Sabaody"},
+  {name:"Killer",he:"קילר",img:"",gender:"Male",height:240,haki:["Armament"],devilFruit:"None",crew:"Kid Pirates",firstArc:"Sabaody"},
+  {name:"Basil Hawkins",he:"בזיל הוקינס",img:"",gender:"Male",height:250,haki:[],devilFruit:"Paramecia",crew:"Hawkins Pirates",firstArc:"Sabaody"},
+  {name:"X Drake",he:"איקס דרייק",img:"",gender:"Male",height:233,haki:[],devilFruit:"Ancient Zoan",crew:"Marines",firstArc:"Sabaody"},
+  {name:"Scratchmen Apoo",he:"סקראצ'מן אפו",img:"",gender:"Male",height:263,haki:[],devilFruit:"Paramecia",crew:"On Air Pirates",firstArc:"Sabaody"},
+  {name:"Capone Bege",he:"קפונה באג'ה",img:"",gender:"Male",height:165,haki:[],devilFruit:"Paramecia",crew:"Fire Tank Pirates",firstArc:"Sabaody"},
+  {name:"Jewelry Bonney",he:"ג'ולרי בוני",img:"",gender:"Female",height:192,haki:[],devilFruit:"Paramecia",crew:"Bonney Pirates",firstArc:"Sabaody"},
+  {name:"Urouge",he:"אורוג'",img:"",gender:"Male",height:244,haki:[],devilFruit:"Paramecia",crew:"Fallen Monk Pirates",firstArc:"Sabaody"},
+
+  {name:"Monkey D. Garp",he:"מאנקי די גארפ",img:"",gender:"Male",height:287,haki:["Armament","Conqueror"],devilFruit:"None",crew:"Marines",firstArc:"Water 7"},
+  {name:"Sengoku",he:"סנגוקו",img:"",gender:"Male",height:297,haki:["Armament"],devilFruit:"Mythical Zoan",crew:"Marines",firstArc:"Sabaody"},
+  {name:"Sakazuki",he:"אקאינו",img:"",gender:"Male",height:306,haki:["Armament"],devilFruit:"Logia",crew:"Marines",firstArc:"Sabaody"},
+  {name:"Borsalino",he:"קיזארו",img:"",gender:"Male",height:302,haki:["Armament"],devilFruit:"Logia",crew:"Marines",firstArc:"Sabaody"},
+  {name:"Kuzan",he:"אוקיג'י",img:"",gender:"Male",height:298,haki:["Armament"],devilFruit:"Logia",crew:"Blackbeard Pirates",firstArc:"Long Ring Long Land"},
+  {name:"Smoker",he:"סמוקר",img:"",gender:"Male",height:209,haki:["Armament"],devilFruit:"Logia",crew:"Marines",firstArc:"Loguetown"},
+  {name:"Tashigi",he:"טאשיגי",img:"",gender:"Female",height:170,haki:[],devilFruit:"None",crew:"Marines",firstArc:"Loguetown"},
+  {name:"Koby",he:"קובי",img:"",gender:"Male",height:175,haki:["Observation"],devilFruit:"None",crew:"Marines",firstArc:"Romance Dawn"},
+  {name:"Helmeppo",he:"הלמפו",img:"",gender:"Male",height:184,haki:[],devilFruit:"None",crew:"Marines",firstArc:"Romance Dawn"},
+  {name:"Issho",he:"פוג'יטורה",img:"",gender:"Male",height:270,haki:["Observation","Armament"],devilFruit:"Paramecia",crew:"Marines",firstArc:"Dressrosa"},
+  {name:"Aramaki",he:"ריוקוגיו",img:"",gender:"Male",height:300,haki:["Armament"],devilFruit:"Logia",crew:"Marines",firstArc:"Wano"},
+  {name:"Vergo",he:"ורגו",img:"",gender:"Male",height:305,haki:["Armament"],devilFruit:"None",crew:"Donquixote Pirates",firstArc:"Punk Hazard"},
+  {name:"Rob Lucci",he:"רוב לוצ'י",img:"",gender:"Male",height:210,haki:["Observation","Armament"],devilFruit:"Zoan",crew:"CP0",firstArc:"Water 7"},
+  {name:"Spandam",he:"ספנדם",img:"",gender:"Male",height:230,haki:[],devilFruit:"None",crew:"CP9",firstArc:"Water 7"},
+  {name:"Kaku",he:"קאקו",img:"",gender:"Male",height:190,haki:["Armament"],devilFruit:"Zoan",crew:"CP0",firstArc:"Water 7"},
+  {name:"Blueno",he:"בלואנו",img:"",gender:"Male",height:225,haki:[],devilFruit:"Paramecia",crew:"CP9",firstArc:"Water 7"},
+  {name:"Kalifa",he:"קליפה",img:"",gender:"Female",height:189,haki:[],devilFruit:"Paramecia",crew:"CP9",firstArc:"Water 7"},
+
+  {name:"Sabo",he:"סאבו",img:"",gender:"Male",height:187,haki:["Observation","Armament","Conqueror"],devilFruit:"Logia",crew:"Revolutionary Army",firstArc:"Post-War"},
+  {name:"Monkey D. Dragon",he:"מאנקי די דרגון",img:"",gender:"Male",height:256,haki:[],devilFruit:"None",crew:"Revolutionary Army",firstArc:"Loguetown"},
+  {name:"Emporio Ivankov",he:"איוונקוב",img:"",gender:"Male",height:326,haki:[],devilFruit:"Paramecia",crew:"Revolutionary Army",firstArc:"Impel Down"},
+  {name:"Inazuma",he:"אינאזומה",img:"",gender:"Male",height:225,haki:[],devilFruit:"Paramecia",crew:"Revolutionary Army",firstArc:"Impel Down"},
+  {name:"Bartolomeo",he:"ברטולומיאו",img:"",gender:"Male",height:240,haki:["Observation"],devilFruit:"Paramecia",crew:"Barto Club",firstArc:"Dressrosa"},
+  {name:"Cavendish",he:"קוונדיש",img:"",gender:"Male",height:209,haki:["Observation","Armament"],devilFruit:"None",crew:"Beautiful Pirates",firstArc:"Dressrosa"},
+
+  {name:"Vinsmoke Reiju",he:"וינסמוק רייג'ו",img:"",gender:"Female",height:192,haki:[],devilFruit:"None",crew:"Germa 66",firstArc:"Whole Cake Island"},
+  {name:"Vinsmoke Ichiji",he:"וינסמוק איצ'יג'י",img:"",gender:"Male",height:187,haki:[],devilFruit:"None",crew:"Germa 66",firstArc:"Whole Cake Island"},
+  {name:"Vinsmoke Niji",he:"וינסמוק ניג'י",img:"",gender:"Male",height:187,haki:[],devilFruit:"None",crew:"Germa 66",firstArc:"Whole Cake Island"},
+  {name:"Vinsmoke Yonji",he:"וינסמוק יונג'י",img:"",gender:"Male",height:187,haki:[],devilFruit:"None",crew:"Germa 66",firstArc:"Whole Cake Island"},
+  {name:"Vinsmoke Judge",he:"וינסמוק ג'אדג'",img:"",gender:"Male",height:274,haki:[],devilFruit:"None",crew:"Germa 66",firstArc:"Whole Cake Island"},
+
+  {name:"Kozuki Oden",he:"קוזוקי אודן",img:"",gender:"Male",height:382,haki:["Observation","Armament","Conqueror"],devilFruit:"None",crew:"Whitebeard Pirates",firstArc:"Zou"},
+  {name:"Kozuki Momonosuke",he:"מומונוסוקה",img:"",gender:"Male",height:120,haki:[],devilFruit:"Mythical Zoan",crew:"None",firstArc:"Punk Hazard"},
+  {name:"Yamato",he:"ימאטו",img:"",gender:"Female",height:263,haki:["Observation","Armament","Conqueror"],devilFruit:"Mythical Zoan",crew:"None",firstArc:"Wano"},
+  {name:"Kin'emon",he:"קינמון",img:"",gender:"Male",height:224,haki:["Armament"],devilFruit:"Paramecia",crew:"Kozuki Family",firstArc:"Punk Hazard"},
+  {name:"Kanjuro",he:"קנג'ורו",img:"",gender:"Male",height:215,haki:[],devilFruit:"Paramecia",crew:"Kozuki Family",firstArc:"Dressrosa"},
+  {name:"Raizo",he:"רייזו",img:"",gender:"Male",height:167,haki:[],devilFruit:"None",crew:"Kozuki Family",firstArc:"Zou"},
+  {name:"Inuarashi",he:"אינוארשי",img:"",gender:"Male",height:393,haki:["Armament"],devilFruit:"None",crew:"Mink Tribe",firstArc:"Zou"},
+  {name:"Nekomamushi",he:"נקומאמושי",img:"",gender:"Male",height:460,haki:["Armament"],devilFruit:"None",crew:"Mink Tribe",firstArc:"Zou"},
+  {name:"Carrot",he:"קארוט",img:"",gender:"Female",height:145,haki:[],devilFruit:"None",crew:"Mink Tribe",firstArc:"Zou"},
+  {name:"Pedro",he:"פדרו",img:"",gender:"Male",height:286,haki:["Armament"],devilFruit:"None",crew:"Mink Tribe",firstArc:"Zou"},
+
+  {name:"Gol D. Roger",he:"גול די רוג'ר",img:"",gender:"Male",height:274,haki:["Observation","Armament","Conqueror"],devilFruit:"None",crew:"Roger Pirates",firstArc:"Loguetown"},
+  {name:"Silvers Rayleigh",he:"סילברס רייליי",img:"",gender:"Male",height:188,haki:["Observation","Armament","Conqueror"],devilFruit:"None",crew:"Roger Pirates",firstArc:"Sabaody"},
+  {name:"Crocus",he:"קרוקוס",img:"",gender:"Male",height:253,haki:[],devilFruit:"None",crew:"Roger Pirates",firstArc:"Reverse Mountain"},
+  {name:"Shakuyaku",he:"שאקי",img:"",gender:"Female",height:192,haki:[],devilFruit:"None",crew:"None",firstArc:"Sabaody"},
+
+  {name:"Nefertari Vivi",he:"נפרטרי ויוי",img:"",gender:"Female",height:169,haki:[],devilFruit:"None",crew:"None",firstArc:"Whisky Peak"},
+  {name:"Pell",he:"פל",img:"",gender:"Male",height:192,haki:[],devilFruit:"Ancient Zoan",crew:"None",firstArc:"Alabasta"},
+  {name:"Chaka",he:"צ'אקה",img:"",gender:"Male",height:263,haki:[],devilFruit:"Ancient Zoan",crew:"None",firstArc:"Alabasta"},
+  {name:"Daz Bones",he:"דאז בונס",img:"",gender:"Male",height:271,haki:[],devilFruit:"Paramecia",crew:"Baroque Works",firstArc:"Alabasta"},
+  {name:"Bentham",he:"בון קליי",img:"",gender:"Male",height:271,haki:[],devilFruit:"Paramecia",crew:"Baroque Works",firstArc:"Whisky Peak"},
+  {name:"Galdino",he:"מר 3",img:"",gender:"Male",height:220,haki:[],devilFruit:"Paramecia",crew:"Baroque Works",firstArc:"Little Garden"},
+
+  {name:"Bellamy",he:"בלאמי",img:"",gender:"Male",height:290,haki:[],devilFruit:"Paramecia",crew:"Bellamy Pirates",firstArc:"Jaya"},
+  {name:"Foxy",he:"פוקסי",img:"",gender:"Male",height:195,haki:[],devilFruit:"Paramecia",crew:"Foxy Pirates",firstArc:"Long Ring Long Land"},
+  {name:"Wapol",he:"ופול",img:"",gender:"Male",height:250,haki:[],devilFruit:"Paramecia",crew:"None",firstArc:"Drum Island"},
+  {name:"Arlong",he:"ארלונג",img:"",gender:"Male",height:263,haki:[],devilFruit:"None",crew:"Arlong Pirates",firstArc:"Arlong Park"},
+  {name:"Don Krieg",he:"דון קריג",img:"",gender:"Male",height:254,haki:[],devilFruit:"None",crew:"Krieg Pirates",firstArc:"Baratie"},
+  {name:"Kuro",he:"קורו",img:"",gender:"Male",height:182,haki:[],devilFruit:"None",crew:"Black Cat Pirates",firstArc:"Syrup Village"},
+  {name:"Hatchan",he:"האצ'אן",img:"",gender:"Male",height:262,haki:[],devilFruit:"None",crew:"None",firstArc:"Arlong Park"},
+  {name:"Caesar Clown",he:"סיזר קלאון",img:"",gender:"Male",height:309,haki:[],devilFruit:"Logia",crew:"None",firstArc:"Punk Hazard"},
+  {name:"Monet",he:"מונה",img:"",gender:"Female",height:191,haki:[],devilFruit:"Logia",crew:"Donquixote Pirates",firstArc:"Punk Hazard"},
+  {name:"Trebol",he:"טרבול",img:"",gender:"Male",height:408,haki:["Armament"],devilFruit:"Paramecia",crew:"Donquixote Pirates",firstArc:"Dressrosa"},
+  {name:"Diamante",he:"דיאמנטה",img:"",gender:"Male",height:277,haki:["Armament"],devilFruit:"Paramecia",crew:"Donquixote Pirates",firstArc:"Dressrosa"},
+  {name:"Pica",he:"פיקה",img:"",gender:"Male",height:502,haki:["Armament"],devilFruit:"Paramecia",crew:"Donquixote Pirates",firstArc:"Dressrosa"},
+  {name:"Corazon",he:"קוראזון",img:"",gender:"Male",height:293,haki:[],devilFruit:"Paramecia",crew:"Donquixote Pirates",firstArc:"Dressrosa"},
+
+  {name:"Vegapunk",he:"וגפאנק",img:"",gender:"Male",height:280,haki:[],devilFruit:"None",crew:"None",firstArc:"Egghead"},
+  {name:"S-Snake",he:"סנייק",img:"",gender:"Female",height:255,haki:[],devilFruit:"Paramecia",crew:"Marines",firstArc:"Egghead"},
+  {name:"S-Hawk",he:"הוק",img:"",gender:"Male",height:293,haki:[],devilFruit:"Paramecia",crew:"Marines",firstArc:"Egghead"},
+  {name:"S-Bear",he:"בר",img:"",gender:"Male",height:689,haki:[],devilFruit:"Paramecia",crew:"Marines",firstArc:"Egghead"},
+  {name:"S-Shark",he:"שארק",img:"",gender:"Male",height:380,haki:[],devilFruit:"Paramecia",crew:"Marines",firstArc:"Egghead"},
+
+  {name:"Tsuru",he:"צורו",img:"",gender:"Female",height:175,haki:[],devilFruit:"Paramecia",crew:"Marines",firstArc:"Sabaody"},
+  {name:"Onigumo",he:"אוניגומו",img:"",gender:"Male",height:232,haki:[],devilFruit:"None",crew:"Marines",firstArc:"Marineford"},
+  {name:"Hina",he:"הינה",img:"",gender:"Female",height:187,haki:[],devilFruit:"Paramecia",crew:"Marines",firstArc:"Loguetown"},
+  {name:"Doberman",he:"דוברמן",img:"",gender:"Male",height:222,haki:[],devilFruit:"None",crew:"Marines",firstArc:"Marineford"},
+  {name:"Strawberry",he:"סטרוברי",img:"",gender:"Male",height:287,haki:[],devilFruit:"None",crew:"Marines",firstArc:"Marineford"},
+  {name:"Yamakaji",he:"ימקאג'י",img:"",gender:"Male",height:286,haki:[],devilFruit:"None",crew:"Marines",firstArc:"Marineford"},
+  {name:"Momonga",he:"מומונגה",img:"",gender:"Male",height:247,haki:[],devilFruit:"None",crew:"Marines",firstArc:"Amazon Lily"},
+  {name:"Bastille",he:"בסטיי",img:"",gender:"Male",height:247,haki:[],devilFruit:"None",crew:"Marines",firstArc:"Dressrosa"},
+  {name:"Maynard",he:"מיינרד",img:"",gender:"Male",height:220,haki:[],devilFruit:"None",crew:"Marines",firstArc:"Dressrosa"},
+  {name:"T-Bone",he:"טי-בון",img:"",gender:"Male",height:295,haki:[],devilFruit:"None",crew:"Marines",firstArc:"Water 7"},
+  {name:"Bogard",he:"בוגרד",img:"",gender:"Male",height:219,haki:[],devilFruit:"None",crew:"Marines",firstArc:"Water 7"},
+  {name:"Brannew",he:"ברנניו",img:"",gender:"Male",height:197,haki:[],devilFruit:"None",crew:"Marines",firstArc:"Sabaody"},
+  {name:"Sentomaru",he:"סנטומארו",img:"",gender:"Male",height:367,haki:["Armament"],devilFruit:"None",crew:"Marines",firstArc:"Sabaody"},
+
+  {name:"Saint Jaygarcia Saturn",he:"סנט סאטורן",img:"",gender:"Male",height:240,haki:[],devilFruit:"Mythical Zoan",crew:"World Government",firstArc:"Egghead"},
+  {name:"Saint Marcus Mars",he:"סנט מארס",img:"",gender:"Male",height:240,haki:[],devilFruit:"Mythical Zoan",crew:"World Government",firstArc:"Egghead"},
+  {name:"Saint Topman Warcury",he:"סנט וורקורי",img:"",gender:"Male",height:240,haki:[],devilFruit:"Mythical Zoan",crew:"World Government",firstArc:"Egghead"},
+  {name:"Saint Ethanbaron V. Nusjuro",he:"סנט נוסג'ורו",img:"",gender:"Male",height:240,haki:[],devilFruit:"Mythical Zoan",crew:"World Government",firstArc:"Egghead"},
+  {name:"Saint Shepherd Ju Peter",he:"סנט ג'ו פיטר",img:"",gender:"Male",height:240,haki:[],devilFruit:"Mythical Zoan",crew:"World Government",firstArc:"Egghead"},
+  {name:"Im",he:"אים",img:"",gender:"Female",height:200,haki:[],devilFruit:"None",crew:"World Government",firstArc:"Reverie"},
+  {name:"Kong",he:"קונג",img:"",gender:"Male",height:350,haki:[],devilFruit:"None",crew:"World Government",firstArc:"Sabaody"},
+  {name:"Vegapunk Lilith",he:"וגפאנק לילית",img:"",gender:"Female",height:178,haki:[],devilFruit:"None",crew:"World Government",firstArc:"Egghead"},
+  {name:"Vegapunk Edison",he:"וגפאנק אדיסון",img:"",gender:"Male",height:280,haki:[],devilFruit:"None",crew:"World Government",firstArc:"Egghead"},
+  {name:"Vegapunk Pythagoras",he:"וגפאנק פיתגורס",img:"",gender:"Male",height:320,haki:[],devilFruit:"None",crew:"World Government",firstArc:"Egghead"},
+  {name:"Vegapunk Atlas",he:"וגפאנק אטלס",img:"",gender:"Female",height:350,haki:[],devilFruit:"None",crew:"World Government",firstArc:"Egghead"},
+  {name:"Vegapunk York",he:"וגפאנק יורק",img:"",gender:"Female",height:247,haki:[],devilFruit:"None",crew:"World Government",firstArc:"Egghead"},
+
+  {name:"Jabra",he:"ג'ברה",img:"",gender:"Male",height:237,haki:[],devilFruit:"Zoan",crew:"CP9",firstArc:"Water 7"},
+  {name:"Kumadori",he:"קומדורי",img:"",gender:"Male",height:312,haki:[],devilFruit:"Paramecia",crew:"CP9",firstArc:"Water 7"},
+  {name:"Fukurou",he:"פוקורו",img:"",gender:"Male",height:220,haki:[],devilFruit:"None",crew:"CP9",firstArc:"Water 7"},
+  {name:"Stussy",he:"סטוסי",img:"",gender:"Female",height:184,haki:[],devilFruit:"Mythical Zoan",crew:"CP0",firstArc:"Whole Cake Island"},
+
+  {name:"Thatch",he:"ת'אץ'",img:"",gender:"Male",height:245,haki:[],devilFruit:"None",crew:"Whitebeard Pirates",firstArc:"Marineford"},
+  {name:"Izo",he:"איזו",img:"",gender:"Male",height:188,haki:["Armament"],devilFruit:"None",crew:"Whitebeard Pirates",firstArc:"Marineford"},
+  {name:"Namur",he:"נמור",img:"",gender:"Male",height:314,haki:[],devilFruit:"None",crew:"Whitebeard Pirates",firstArc:"Marineford"},
+  {name:"Blamenco",he:"בלמנקו",img:"",gender:"Male",height:380,haki:[],devilFruit:"Paramecia",crew:"Whitebeard Pirates",firstArc:"Marineford"},
+  {name:"Rakuyo",he:"רקויו",img:"",gender:"Male",height:275,haki:[],devilFruit:"None",crew:"Whitebeard Pirates",firstArc:"Marineford"},
+  {name:"Atmos",he:"אטמוס",img:"",gender:"Male",height:358,haki:[],devilFruit:"None",crew:"Whitebeard Pirates",firstArc:"Marineford"},
+  {name:"Curiel",he:"קוריאל",img:"",gender:"Male",height:290,haki:[],devilFruit:"None",crew:"Whitebeard Pirates",firstArc:"Marineford"},
+  {name:"Kingdew",he:"קינגדיו",img:"",gender:"Male",height:396,haki:[],devilFruit:"None",crew:"Whitebeard Pirates",firstArc:"Marineford"},
+  {name:"Speed Jiru",he:"ספיד ג'ירו",img:"",gender:"Male",height:367,haki:[],devilFruit:"None",crew:"Whitebeard Pirates",firstArc:"Marineford"},
+  {name:"Fossa",he:"פוסה",img:"",gender:"Male",height:281,haki:[],devilFruit:"None",crew:"Whitebeard Pirates",firstArc:"Marineford"},
+  {name:"Haruta",he:"הרוטה",img:"",gender:"Male",height:161,haki:[],devilFruit:"None",crew:"Whitebeard Pirates",firstArc:"Marineford"},
+
+  {name:"Charlotte Daifuku",he:"שרלוט דייפוקו",img:"",gender:"Male",height:525,haki:[],devilFruit:"Paramecia",crew:"Big Mom Pirates",firstArc:"Whole Cake Island"},
+  {name:"Charlotte Oven",he:"שרלוט אובן",img:"",gender:"Male",height:526,haki:["Armament"],devilFruit:"Paramecia",crew:"Big Mom Pirates",firstArc:"Whole Cake Island"},
+  {name:"Charlotte Compote",he:"שרלוט קומפוט",img:"",gender:"Female",height:480,haki:[],devilFruit:"None",crew:"Big Mom Pirates",firstArc:"Whole Cake Island"},
+  {name:"Charlotte Mont-d'Or",he:"שרלוט מון דור",img:"",gender:"Male",height:280,haki:[],devilFruit:"Paramecia",crew:"Big Mom Pirates",firstArc:"Whole Cake Island"},
+  {name:"Charlotte Galette",he:"שרלוט גאלט",img:"",gender:"Female",height:301,haki:[],devilFruit:"Paramecia",crew:"Big Mom Pirates",firstArc:"Whole Cake Island"},
+  {name:"Charlotte Praline",he:"שרלוט פראלין",img:"",gender:"Female",height:1224,haki:[],devilFruit:"None",crew:"Big Mom Pirates",firstArc:"Whole Cake Island"},
+  {name:"Tamago",he:"טמגו",img:"",gender:"Male",height:297,haki:[],devilFruit:"Paramecia",crew:"Big Mom Pirates",firstArc:"Fishman Island"},
+  {name:"Pekoms",he:"פקומס",img:"",gender:"Male",height:248,haki:[],devilFruit:"Zoan",crew:"Big Mom Pirates",firstArc:"Fishman Island"},
+  {name:"Bobbin",he:"בובין",img:"",gender:"Male",height:219,haki:[],devilFruit:"None",crew:"Big Mom Pirates",firstArc:"Whole Cake Island"},
+  {name:"Charlotte Brulee",he:"שרלוט ברולה",img:"",gender:"Female",height:245,haki:[],devilFruit:"Paramecia",crew:"Big Mom Pirates",firstArc:"Whole Cake Island"},
+  {name:"Charlotte Opera",he:"שרלוט אופרה",img:"",gender:"Male",height:524,haki:["Armament"],devilFruit:"Paramecia",crew:"Big Mom Pirates",firstArc:"Whole Cake Island"},
+  {name:"Charlotte Mascarpone",he:"שרלוט מסקרפונה",img:"",gender:"Male",height:175,haki:[],devilFruit:"None",crew:"Big Mom Pirates",firstArc:"Whole Cake Island"},
+  {name:"Charlotte Joscarpone",he:"שרלוט ג'וסקרפונה",img:"",gender:"Female",height:175,haki:[],devilFruit:"None",crew:"Big Mom Pirates",firstArc:"Whole Cake Island"},
+  {name:"Charlotte Chiffon",he:"שרלוט שיפון",img:"",gender:"Female",height:250,haki:[],devilFruit:"None",crew:"Fire Tank Pirates",firstArc:"Whole Cake Island"},
+  {name:"Charlotte Lola",he:"שרלוט לולה",img:"",gender:"Female",height:250,haki:[],devilFruit:"None",crew:"None",firstArc:"Thriller Bark"},
+
+  {name:"Avalo Pizarro",he:"אבלו פיזרו",img:"",gender:"Male",height:550,haki:[],devilFruit:"Paramecia",crew:"Blackbeard Pirates",firstArc:"Impel Down"},
+  {name:"Vasco Shot",he:"ואסקו שוט",img:"",gender:"Male",height:301,haki:[],devilFruit:"Paramecia",crew:"Blackbeard Pirates",firstArc:"Impel Down"},
+  {name:"Catarina Devon",he:"קטרינה דוון",img:"",gender:"Female",height:280,haki:[],devilFruit:"Zoan",crew:"Blackbeard Pirates",firstArc:"Impel Down"},
+  {name:"Sanjuan Wolf",he:"סן חואן וולף",img:"",gender:"Male",height:18000,haki:[],devilFruit:"Paramecia",crew:"Blackbeard Pirates",firstArc:"Impel Down"},
+  {name:"Lafitte",he:"לפיט",img:"",gender:"Male",height:250,haki:[],devilFruit:"None",crew:"Blackbeard Pirates",firstArc:"Marineford"},
+  {name:"Doc Q",he:"דוק קיו",img:"",gender:"Male",height:232,haki:[],devilFruit:"None",crew:"Blackbeard Pirates",firstArc:"Jaya"},
+
+  {name:"Bepo",he:"בפו",img:"",gender:"Male",height:240,haki:[],devilFruit:"None",crew:"Heart Pirates",firstArc:"Sabaody"},
+  {name:"Shachi",he:"שאצ'י",img:"",gender:"Male",height:178,haki:[],devilFruit:"None",crew:"Heart Pirates",firstArc:"Sabaody"},
+  {name:"Penguin",he:"פינגווין",img:"",gender:"Male",height:180,haki:[],devilFruit:"None",crew:"Heart Pirates",firstArc:"Sabaody"},
+  {name:"Ikkaku",he:"איקקו",img:"",gender:"Female",height:165,haki:[],devilFruit:"None",crew:"Heart Pirates",firstArc:"Sabaody"},
+  {name:"Jean Bart",he:"ז'אן בארט",img:"",gender:"Male",height:386,haki:[],devilFruit:"None",crew:"Heart Pirates",firstArc:"Sabaody"},
+
+  {name:"Boa Sandersonia",he:"בואה סנדרסוניה",img:"",gender:"Female",height:745,haki:[],devilFruit:"Zoan",crew:"Kuja Pirates",firstArc:"Amazon Lily"},
+  {name:"Boa Marigold",he:"בואה מריגולד",img:"",gender:"Female",height:821,haki:[],devilFruit:"Zoan",crew:"Kuja Pirates",firstArc:"Amazon Lily"},
+  {name:"Gloriosa",he:"גלוריוסה",img:"",gender:"Female",height:180,haki:[],devilFruit:"None",crew:"Kuja Pirates",firstArc:"Amazon Lily"},
+
+  {name:"Koala",he:"קואלה",img:"",gender:"Female",height:167,haki:["Armament"],devilFruit:"None",crew:"Revolutionary Army",firstArc:"Post-War"},
+  {name:"Hack",he:"האק",img:"",gender:"Male",height:296,haki:[],devilFruit:"None",crew:"Revolutionary Army",firstArc:"Dressrosa"},
+  {name:"Belo Betty",he:"בלו בטי",img:"",gender:"Female",height:197,haki:[],devilFruit:"Paramecia",crew:"Revolutionary Army",firstArc:"Reverie"},
+  {name:"Karasu",he:"קראסו",img:"",gender:"Male",height:200,haki:[],devilFruit:"Paramecia",crew:"Revolutionary Army",firstArc:"Reverie"},
+  {name:"Lindbergh",he:"לינדברג",img:"",gender:"Male",height:150,haki:[],devilFruit:"None",crew:"Revolutionary Army",firstArc:"Reverie"},
+  {name:"Morley",he:"מורלי",img:"",gender:"Male",height:1750,haki:[],devilFruit:"Paramecia",crew:"Revolutionary Army",firstArc:"Reverie"},
+
+  {name:"Sugar",he:"שוגר",img:"",gender:"Female",height:50,haki:[],devilFruit:"Paramecia",crew:"Donquixote Pirates",firstArc:"Dressrosa"},
+  {name:"Senor Pink",he:"סניור פינק",img:"",gender:"Male",height:311,haki:["Armament"],devilFruit:"Paramecia",crew:"Donquixote Pirates",firstArc:"Dressrosa"},
+  {name:"Lao G",he:"לאו ג'י",img:"",gender:"Male",height:232,haki:[],devilFruit:"None",crew:"Donquixote Pirates",firstArc:"Dressrosa"},
+  {name:"Machvise",he:"מצ'וויס",img:"",gender:"Male",height:502,haki:[],devilFruit:"Paramecia",crew:"Donquixote Pirates",firstArc:"Dressrosa"},
+  {name:"Gladius",he:"גלדיוס",img:"",gender:"Male",height:215,haki:[],devilFruit:"Paramecia",crew:"Donquixote Pirates",firstArc:"Dressrosa"},
+  {name:"Buffalo",he:"באפלו",img:"",gender:"Male",height:220,haki:[],devilFruit:"Paramecia",crew:"Donquixote Pirates",firstArc:"Punk Hazard"},
+  {name:"Baby 5",he:"בייבי 5",img:"",gender:"Female",height:184,haki:[],devilFruit:"Paramecia",crew:"Donquixote Pirates",firstArc:"Punk Hazard"},
+  {name:"Dellinger",he:"דלינג'ר",img:"",gender:"Male",height:187,haki:[],devilFruit:"None",crew:"Donquixote Pirates",firstArc:"Dressrosa"},
+  {name:"Giolla",he:"ג'יולה",img:"",gender:"Female",height:245,haki:[],devilFruit:"Paramecia",crew:"Donquixote Pirates",firstArc:"Dressrosa"},
+
+  {name:"Porche",he:"פורש",img:"",gender:"Female",height:169,haki:[],devilFruit:"None",crew:"Foxy Pirates",firstArc:"Long Ring Long Land"},
+  {name:"Hamburg",he:"המבורג",img:"",gender:"Male",height:480,haki:[],devilFruit:"None",crew:"Foxy Pirates",firstArc:"Long Ring Long Land"},
+  {name:"Big Pan",he:"ביג פאן",img:"",gender:"Male",height:530,haki:[],devilFruit:"None",crew:"Foxy Pirates",firstArc:"Long Ring Long Land"},
+  {name:"Itomimizu",he:"איטומימיזו",img:"",gender:"Male",height:220,haki:[],devilFruit:"None",crew:"Foxy Pirates",firstArc:"Long Ring Long Land"},
+  {name:"Capote",he:"קפוטה",img:"",gender:"Male",height:350,haki:[],devilFruit:"None",crew:"Foxy Pirates",firstArc:"Long Ring Long Land"},
+
+  {name:"Mr. 4",he:"מר 4",img:"",gender:"Male",height:309,haki:[],devilFruit:"None",crew:"Baroque Works",firstArc:"Alabasta"},
+  {name:"Miss Merry Christmas",he:"מיס מרי כריסטמס",img:"",gender:"Female",height:153,haki:[],devilFruit:"Zoan",crew:"Baroque Works",firstArc:"Alabasta"},
+  {name:"Mr. 5",he:"מר 5",img:"",gender:"Male",height:226,haki:[],devilFruit:"Paramecia",crew:"Baroque Works",firstArc:"Whisky Peak"},
+  {name:"Miss Valentine",he:"מיס ולנטיין",img:"",gender:"Female",height:169,haki:[],devilFruit:"Paramecia",crew:"Baroque Works",firstArc:"Whisky Peak"},
+  {name:"Miss Goldenweek",he:"מיס גולדן ויק",img:"",gender:"Female",height:150,haki:[],devilFruit:"None",crew:"Baroque Works",firstArc:"Little Garden"},
+  {name:"Miss Doublefinger",he:"מיס דאבל פינגר",img:"",gender:"Female",height:192,haki:[],devilFruit:"Paramecia",crew:"Baroque Works",firstArc:"Alabasta"},
+  {name:"Miss Monday",he:"מיס מאנדיי",img:"",gender:"Female",height:230,haki:[],devilFruit:"None",crew:"Baroque Works",firstArc:"Whisky Peak"},
+
+  {name:"Kuroobi",he:"קורואובי",img:"",gender:"Male",height:270,haki:[],devilFruit:"None",crew:"Arlong Pirates",firstArc:"Arlong Park"},
+  {name:"Chu",he:"צ'ו",img:"",gender:"Male",height:240,haki:[],devilFruit:"None",crew:"Arlong Pirates",firstArc:"Arlong Park"},
+
+  {name:"Enel",he:"אנל",img:"",gender:"Male",height:268,haki:["Observation"],devilFruit:"Logia",crew:"Enel's Army",firstArc:"Skypiea"},
+  {name:"Wiper",he:"וויפר",img:"",gender:"Male",height:251,haki:[],devilFruit:"None",crew:"Shandians",firstArc:"Skypiea"},
+  {name:"Gan Fall",he:"גאן פול",img:"",gender:"Male",height:174,haki:[],devilFruit:"None",crew:"None",firstArc:"Skypiea"},
+  {name:"Conis",he:"קוניס",img:"",gender:"Female",height:175,haki:[],devilFruit:"None",crew:"None",firstArc:"Skypiea"},
+  {name:"Pagaya",he:"פגאיה",img:"",gender:"Male",height:195,haki:[],devilFruit:"None",crew:"None",firstArc:"Skypiea"},
+
+  {name:"O-Tama",he:"או-תמה",img:"",gender:"Female",height:105,haki:[],devilFruit:"Paramecia",crew:"None",firstArc:"Wano"},
+  {name:"Kawamatsu",he:"קוומאצו",img:"",gender:"Male",height:300,haki:["Armament"],devilFruit:"None",crew:"Kozuki Family",firstArc:"Wano"},
+  {name:"Kiku",he:"קיקו",img:"",gender:"Female",height:287,haki:["Armament"],devilFruit:"None",crew:"Kozuki Family",firstArc:"Wano"},
+  {name:"Ashura Doji",he:"אשורה דוג'י",img:"",gender:"Male",height:360,haki:["Armament"],devilFruit:"None",crew:"Kozuki Family",firstArc:"Wano"},
+  {name:"Denjiro",he:"דנג'ירו",img:"",gender:"Male",height:296,haki:["Armament"],devilFruit:"None",crew:"Kozuki Family",firstArc:"Wano"},
+  {name:"Shinobu",he:"שינובו",img:"",gender:"Female",height:211,haki:[],devilFruit:"Paramecia",crew:"Kozuki Family",firstArc:"Wano"},
+  {name:"Hyogoro",he:"היוגורו",img:"",gender:"Male",height:200,haki:["Armament"],devilFruit:"None",crew:"None",firstArc:"Wano"},
+  {name:"Yasuie",he:"יסואיה",img:"",gender:"Male",height:350,haki:[],devilFruit:"None",crew:"None",firstArc:"Wano"},
+  {name:"Toko",he:"טוקו",img:"",gender:"Female",height:100,haki:[],devilFruit:"None",crew:"None",firstArc:"Wano"},
+  {name:"Kozuki Hiyori",he:"קוזוקי היורי",img:"",gender:"Female",height:172,haki:[],devilFruit:"None",crew:"Kozuki Family",firstArc:"Wano"},
+
+  {name:"Hody Jones",he:"הודי ג'ונס",img:"",gender:"Male",height:343,haki:[],devilFruit:"None",crew:"New Fishman Pirates",firstArc:"Fishman Island"},
+  {name:"Vander Decken IX",he:"ואנדר דקן",img:"",gender:"Male",height:350,haki:[],devilFruit:"Paramecia",crew:"Flying Pirates",firstArc:"Fishman Island"},
+  {name:"Shirahoshi",he:"שיראהושי",img:"",gender:"Female",height:1230,haki:[],devilFruit:"None",crew:"Ryugu Kingdom",firstArc:"Fishman Island"},
+  {name:"Fukaboshi",he:"פוקאבושי",img:"",gender:"Male",height:1010,haki:[],devilFruit:"None",crew:"Ryugu Kingdom",firstArc:"Fishman Island"},
+  {name:"Neptune",he:"נפטון",img:"",gender:"Male",height:1232,haki:[],devilFruit:"None",crew:"Ryugu Kingdom",firstArc:"Fishman Island"},
+  {name:"Otohime",he:"אוטוהימה",img:"",gender:"Female",height:603,haki:[],devilFruit:"None",crew:"Ryugu Kingdom",firstArc:"Fishman Island"},
+
+  {name:"Riku Doldo III",he:"ריקו דולדו השלישי",img:"",gender:"Male",height:290,haki:[],devilFruit:"None",crew:"None",firstArc:"Dressrosa"},
+  {name:"Rebecca",he:"רבקה",img:"",gender:"Female",height:169,haki:[],devilFruit:"None",crew:"None",firstArc:"Dressrosa"},
+  {name:"Kyros",he:"קירוס",img:"",gender:"Male",height:285,haki:["Armament"],devilFruit:"None",crew:"None",firstArc:"Dressrosa"},
+  {name:"Viola",he:"ויולה",img:"",gender:"Female",height:188,haki:[],devilFruit:"Paramecia",crew:"None",firstArc:"Dressrosa"},
+  {name:"Don Chinjao",he:"דון צ'ינגאו",img:"",gender:"Male",height:285,haki:["Armament","Conqueror"],devilFruit:"None",crew:"Happo Navy",firstArc:"Dressrosa"},
+  {name:"Sai",he:"סאי",img:"",gender:"Male",height:195,haki:[],devilFruit:"None",crew:"Happo Navy",firstArc:"Dressrosa"},
+
+  {name:"Wanda",he:"וונדה",img:"",gender:"Female",height:280,haki:[],devilFruit:"None",crew:"Mink Tribe",firstArc:"Zou"},
+  {name:"Sicilian",he:"סיציליאן",img:"",gender:"Male",height:421,haki:[],devilFruit:"None",crew:"Mink Tribe",firstArc:"Zou"},
+  {name:"Bariete",he:"באריטה",img:"",gender:"Male",height:280,haki:[],devilFruit:"None",crew:"Mink Tribe",firstArc:"Zou"},
+
+  {name:"Dr. Kureha",he:"ד\"ר קורהה",img:"",gender:"Female",height:192,haki:[],devilFruit:"None",crew:"None",firstArc:"Drum Island"},
+  {name:"Dr. Hiriluk",he:"ד\"ר הירילוק",img:"",gender:"Male",height:290,haki:[],devilFruit:"None",crew:"None",firstArc:"Drum Island"},
+
+  {name:"Scopper Gaban",he:"סקופר גבן",img:"",gender:"Male",height:230,haki:[],devilFruit:"None",crew:"Roger Pirates",firstArc:"Loguetown"}
+];
+
+let target = null;
+let guessedNames = new Set();
+let guessHistory = [];
+let activeSuggestion = -1;
+let LANG = "he";
+try { LANG = localStorage.getItem("op-lang") || "he"; } catch(e) {}
+
+const I18N = {
+  he: {
+    title: "נחש את דמות ה-One Piece",
+    newGame: "משחק חדש",
+    placeholder: "הקלד שם דמות...",
+    legendCorrect: "תואם",
+    legendPartial: "תואם חלקית",
+    legendWrong: "לא תואם",
+    legendUp: "▲ גבוה/מאוחר יותר",
+    legendDown: "▼ נמוך/מוקדם יותר",
+    colCharacter: "דמות",
+    colGender: "מין",
+    colDevilFruit: "פרי שטן",
+    colHaki: "סוגי האקי",
+    colCrew: "צוות",
+    colFirstArc: "ארק ראשון",
+    colHeight: "גובה",
+    startMsg: "משחק חדש התחיל. נחש את הדמות!",
+    win: name => `🎉 ניצחת! הדמות הייתה ${name}. ניחושים: ${guessedNames.size}`,
+    guesses: n => `ניחושים: ${n}`,
+    notFound: name => `דמות לא נמצאה: ${name}`,
+    already: name => `כבר ניחשת את ${name}`,
+    cm: "ס\"מ",
+    male: "זכר", female: "נקבה",
+    none: "אין",
+    Paramecia: "פרמיסיה", Logia: "לוגיה", Zoan: "זואן",
+    "Mythical Zoan": "זואן מיתי", "Ancient Zoan": "זואן קדום",
+    Observation: "תצפיתי", Armament: "חימוש", Conqueror: "כיבוש",
+    langBtn: "EN",
+    allCrews: "כל הצוותים"
+  },
+  en: {
+    title: "Guess the One Piece Character",
+    newGame: "New Game",
+    placeholder: "Type a character name...",
+    legendCorrect: "Match",
+    legendPartial: "Partial match",
+    legendWrong: "No match",
+    legendUp: "▲ Taller / Later arc",
+    legendDown: "▼ Shorter / Earlier arc",
+    colCharacter: "Character",
+    colGender: "Gender",
+    colDevilFruit: "Devil Fruit",
+    colHaki: "Haki Types",
+    colCrew: "Crew",
+    colFirstArc: "First Arc",
+    colHeight: "Height",
+    startMsg: "New game started. Guess the character!",
+    win: name => `🎉 You won! The character was ${name}. Guesses: ${guessedNames.size}`,
+    guesses: n => `Guesses: ${n}`,
+    notFound: name => `Character not found: ${name}`,
+    already: name => `You already guessed ${name}`,
+    cm: "cm",
+    male: "Male", female: "Female",
+    none: "None",
+    Paramecia: "Paramecia", Logia: "Logia", Zoan: "Zoan",
+    "Mythical Zoan": "Mythical Zoan", "Ancient Zoan": "Ancient Zoan",
+    Observation: "Observation", Armament: "Armament", Conqueror: "Conqueror",
+    langBtn: "עב",
+    allCrews: "All Crews"
+  }
+};
+
+function t(key) { return I18N[LANG][key]; }
+function displayName(char) { return LANG === "he" ? (char.he || char.name) : char.name; }
+
+const ARC_ORDER = [
+  "Romance Dawn","Orange Town","Syrup Village","Baratie","Arlong Park",
+  "Loguetown","Reverse Mountain","Whisky Peak","Little Garden","Drum Island",
+  "Alabasta","Jaya","Skypiea","Long Ring Long Land","Water 7",
+  "Enies Lobby","Thriller Bark","Sabaody","Amazon Lily","Impel Down",
+  "Marineford","Post-War","Fishman Island","Punk Hazard","Dressrosa",
+  "Zou","Whole Cake Island","Reverie","Wano","Egghead","Elbaf"
+];
+function arcIndex(name) {
+  const i = ARC_ORDER.indexOf(name);
+  return i === -1 ? 999 : i;
+}
+
+const searchInput = document.getElementById("searchInput");
+const suggestionsEl = document.getElementById("suggestions");
+const guessBody = document.getElementById("guessBody");
+const statusEl = document.getElementById("status");
+const newGameBtn = document.getElementById("newGameBtn");
+const langToggleBtn = document.getElementById("langToggleBtn");
+const appTitle = document.getElementById("appTitle");
+const legendEl = document.getElementById("legend");
+const tableHeadEl = document.getElementById("tableHead");
+const crewFilterEl = document.getElementById("crewFilter");
+
+function hashColor(str) {
+  let h = 0;
+  for (let i = 0; i < str.length; i++) h = (h * 31 + str.charCodeAt(i)) >>> 0;
+  const palette = [
+    "#a8261d","#6e150e","#c9a44c","#8a6a1f","#2f7d32","#1b4d1e",
+    "#103a5a","#1e5c8a","#6a3a8a","#8a3a6a","#3a6a8a","#8a4a1a",
+    "#5a2a8a","#2a8a5a","#8a2a4a","#4a8a2a"
+  ];
+  return palette[h % palette.length];
+}
+
+function avatarHTML(char) {
+  if (char.img && char.img.trim()) {
+    return `<div class="avatar" style="background-image:url('${char.img}')"></div>`;
+  }
+  const letter = (char.name || "?").trim()[0].toUpperCase();
+  const color = hashColor(char.name);
+  return `<div class="avatar" style="background:${color}">${letter}</div>`;
+}
+
+function escapeHtml(s) {
+  return s.replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+}
+
+function startNewGame() {
+  target = CHARACTERS[Math.floor(Math.random() * CHARACTERS.length)];
+  guessedNames.clear();
+  guessHistory = [];
+  guessBody.innerHTML = "";
+  statusEl.textContent = t("startMsg");
+  statusEl.classList.remove("win");
+  searchInput.value = "";
+  searchInput.disabled = false;
+  searchInput.focus();
+  hideSuggestions();
+  console.log("Target (debug):", target.name, "/", target.he);
+}
+
+function hideSuggestions() {
+  suggestionsEl.classList.remove("show");
+  suggestionsEl.innerHTML = "";
+  activeSuggestion = -1;
+}
+
+function matchesQuery(char, q) {
+  const en = (char.name || "").toLowerCase();
+  const he = (char.he || "");
+  return en.includes(q) || he.includes(q);
+}
+
+function showSuggestions(query) {
+  const q = query.trim().toLowerCase();
+  const crew = crewFilterEl.value;
+  const base = CHARACTERS.filter(c =>
+    !guessedNames.has(c.name) &&
+    (!crew || c.crew === crew)
+  );
+  const locale = LANG === "he" ? "he" : "en";
+  const sorted = [...base].sort((a, b) => {
+    const aName = LANG === "he" ? (a.he || a.name) : a.name;
+    const bName = LANG === "he" ? (b.he || b.name) : b.name;
+    return aName.localeCompare(bName, locale, { sensitivity: "base" });
+  });
+  const matches = q
+    ? sorted.filter(c => matchesQuery(c, q)).slice(0, 50)
+    : sorted.slice(0, 50);
+  renderSuggestions(matches);
+}
+
+function populateCrewFilter() {
+  const currentValue = crewFilterEl.value;
+  const crews = [...new Set(CHARACTERS.map(c => c.crew))].sort();
+  const counts = {};
+  for (const c of CHARACTERS) counts[c.crew] = (counts[c.crew] || 0) + 1;
+  crewFilterEl.innerHTML =
+    `<option value="">${t("allCrews")} (${CHARACTERS.length})</option>` +
+    crews.map(cr => `<option value="${escapeHtml(cr)}">${escapeHtml(cr)} (${counts[cr]})</option>`).join("");
+  crewFilterEl.value = currentValue || "";
+}
+
+function renderSuggestions(list) {
+  if (list.length === 0) { hideSuggestions(); return; }
+  suggestionsEl.innerHTML = list.map((c, i) => {
+    const primary = LANG === "he" ? (c.he || c.name) : c.name;
+    const secondary = LANG === "he" ? c.name : (c.he || "");
+    return `
+    <li data-name="${escapeHtml(c.name)}" data-idx="${i}">
+      ${avatarHTML(c)}
+      <div class="li-text">
+        <span class="he">${escapeHtml(primary)}</span>
+        <span class="en">${escapeHtml(secondary)}</span>
+      </div>
+    </li>`;
+  }).join("");
+  suggestionsEl.classList.add("show");
+  activeSuggestion = -1;
+  // Use mousedown to fire before input blur
+  suggestionsEl.querySelectorAll("li").forEach(li => {
+    li.addEventListener("mousedown", e => {
+      e.preventDefault();
+      submitGuess(li.dataset.name);
+    });
+  });
+}
+
+function compareHaki(guessHaki, targetHaki) {
+  const gSet = new Set(guessHaki);
+  const tSet = new Set(targetHaki);
+  const allTypes = ["Observation","Armament","Conqueror"];
+  let matches = 0;
+  for (const type of allTypes) if (gSet.has(type) && tSet.has(type)) matches++;
+  if (gSet.size === 0 && tSet.size === 0) return "correct";
+  if (gSet.size === tSet.size && [...gSet].every(x => tSet.has(x))) return "correct";
+  if (matches > 0) return "partial";
+  return "wrong";
+}
+
+function hakiLabel(haki) {
+  if (!haki || haki.length === 0) return t("none");
+  return haki.map(h => t(h) || h).join(", ");
+}
+
+function dfLabel(df) {
+  if (df === "None") return t("none");
+  return t(df) || df;
+}
+
+function genderLabel(g) {
+  return g === "Male" ? t("male") : g === "Female" ? t("female") : g;
+}
+
+function submitGuess(name) {
+  const guess = CHARACTERS.find(c => c.name === name);
+  if (!guess) { statusEl.textContent = t("notFound")(name); return; }
+  if (guessedNames.has(guess.name)) { statusEl.textContent = t("already")(displayName(guess)); return; }
+  guessedNames.add(guess.name);
+  guessHistory.push(guess);
+  renderGuess(guess);
+  searchInput.value = "";
+  hideSuggestions();
+  if (guess.name === target.name) {
+    statusEl.textContent = t("win")(displayName(target));
+    statusEl.classList.add("win");
+    searchInput.disabled = true;
+  } else {
+    statusEl.textContent = t("guesses")(guessedNames.size);
+    statusEl.classList.remove("win");
+  }
+}
+
+function renderGuess(guess) {
+  const tr = document.createElement("tr");
+  const cells = [];
+  const nameHtml = `<div class="row-flex">${avatarHTML(guess)}<span>${escapeHtml(displayName(guess))}</span></div>`;
+  cells.push({ html: nameHtml, cls: "name" });
+  cells.push({ text: genderLabel(guess.gender), cls: guess.gender === target.gender ? "correct" : "wrong", label: t("colGender") });
+  cells.push({ text: dfLabel(guess.devilFruit), cls: guess.devilFruit === target.devilFruit ? "correct" : "wrong", label: t("colDevilFruit") });
+  cells.push({ text: hakiLabel(guess.haki), cls: compareHaki(guess.haki, target.haki), label: t("colHaki") });
+  cells.push({ text: guess.crew, cls: guess.crew === target.crew ? "correct" : "wrong", label: t("colCrew") });
+  let arcText = guess.firstArc;
+  let arcCls = "wrong";
+  if (guess.firstArc === target.firstArc) {
+    arcCls = "correct";
+  } else {
+    const gi = arcIndex(guess.firstArc);
+    const ti = arcIndex(target.firstArc);
+    if (ti > gi) arcText += ' <span class="arrow">▲</span>';
+    else if (ti < gi) arcText += ' <span class="arrow">▼</span>';
+  }
+  cells.push({ html: arcText, cls: arcCls, label: t("colFirstArc") });
+  let heightText = guess.height + " " + t("cm");
+  let heightCls = "wrong";
+  if (guess.height === target.height) heightCls = "correct";
+  else if (target.height > guess.height) heightText += ' <span class="arrow">▲</span>';
+  else heightText += ' <span class="arrow">▼</span>';
+  cells.push({ html: heightText, cls: heightCls, label: t("colHeight") });
+  for (const cell of cells) {
+    const td = document.createElement("td");
+    td.className = cell.cls || "";
+    if (cell.label) td.setAttribute("data-label", cell.label);
+    if (cell.html) td.innerHTML = cell.html;
+    else td.textContent = cell.text;
+    tr.appendChild(td);
+  }
+  guessBody.prepend(tr);
+}
+
+function rerenderAllGuesses() {
+  guessBody.innerHTML = "";
+  // history is in order of guessing; renderGuess prepends so iterate forward
+  for (const g of guessHistory) renderGuess(g);
+}
+
+function applyLanguage() {
+  document.documentElement.lang = LANG;
+  document.documentElement.dir = LANG === "he" ? "rtl" : "ltr";
+  appTitle.textContent = t("title");
+  newGameBtn.textContent = t("newGame");
+  searchInput.placeholder = t("placeholder");
+  langToggleBtn.textContent = t("langBtn");
+  legendEl.innerHTML = `
+    <span class="legend-item"><span class="swatch correct"></span> ${t("legendCorrect")}</span>
+    <span class="legend-item"><span class="swatch partial"></span> ${t("legendPartial")}</span>
+    <span class="legend-item"><span class="swatch wrong"></span> ${t("legendWrong")}</span>
+    <span class="legend-item">${t("legendUp")}</span>
+    <span class="legend-item">${t("legendDown")}</span>`;
+  tableHeadEl.innerHTML = `
+    <th>${t("colCharacter")}</th>
+    <th>${t("colGender")}</th>
+    <th>${t("colDevilFruit")}</th>
+    <th>${t("colHaki")}</th>
+    <th>${t("colCrew")}</th>
+    <th>${t("colFirstArc")}</th>
+    <th>${t("colHeight")}</th>`;
+  populateCrewFilter();
+  // Re-render existing guesses with new language
+  rerenderAllGuesses();
+  // Update status text if game still in progress / won
+  if (target) {
+    if (searchInput.disabled) {
+      statusEl.textContent = t("win")(displayName(target));
+    } else if (guessedNames.size > 0) {
+      statusEl.textContent = t("guesses")(guessedNames.size);
+    } else {
+      statusEl.textContent = t("startMsg");
+    }
+  }
+}
+
+langToggleBtn.addEventListener("click", () => {
+  LANG = LANG === "he" ? "en" : "he";
+  try { localStorage.setItem("op-lang", LANG); } catch(e) {}
+  applyLanguage();
+});
+
+searchInput.addEventListener("input", e => showSuggestions(e.target.value));
+searchInput.addEventListener("focus", e => showSuggestions(e.target.value));
+crewFilterEl.addEventListener("change", () => {
+  searchInput.focus();
+  showSuggestions(searchInput.value);
+});
+
+searchInput.addEventListener("keydown", e => {
+  const items = suggestionsEl.querySelectorAll("li");
+  if (e.key === "ArrowDown" && items.length) {
+    e.preventDefault();
+    activeSuggestion = (activeSuggestion + 1) % items.length;
+    updateActive(items);
+  } else if (e.key === "ArrowUp" && items.length) {
+    e.preventDefault();
+    activeSuggestion = (activeSuggestion - 1 + items.length) % items.length;
+    updateActive(items);
+  } else if (e.key === "Enter") {
+    e.preventDefault();
+    if (activeSuggestion >= 0 && items[activeSuggestion]) submitGuess(items[activeSuggestion].dataset.name);
+    else if (items.length > 0) submitGuess(items[0].dataset.name);
+  } else if (e.key === "Escape") hideSuggestions();
+});
+
+function updateActive(items) {
+  items.forEach((li, i) => {
+    li.classList.toggle("active", i === activeSuggestion);
+    if (i === activeSuggestion) li.scrollIntoView({ block: "nearest" });
+  });
+}
+
+document.addEventListener("mousedown", e => {
+  if (!e.target.closest(".search-wrap")) hideSuggestions();
+});
+
+newGameBtn.addEventListener("click", startNewGame);
+applyLanguage();
+startNewGame();
+</script>
+</body>
+</html>
