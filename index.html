@@ -1010,8 +1010,8 @@ function showSuggestions(query) {
     return aName.localeCompare(bName, locale, { sensitivity: "base" });
   });
   const matches = q
-    ? sorted.filter(c => matchesQuery(c, q)).slice(0, 50)
-    : sorted.slice(0, 50);
+    ? sorted.filter(c => matchesQuery(c, q))
+    : sorted;
   renderSuggestions(matches);
 }
 
